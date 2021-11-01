@@ -1,2 +1,1 @@
 # komentarz
-a = 1
