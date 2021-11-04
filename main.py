@@ -1,13 +1,15 @@
 import pygame
-from cc.constants import WIDTH, HEIGHT, FPS
+from cc.maths import WIDTH, HEIGHT
+from cc.game import Game
 
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Car Racer v1.0 by AW')
+FPS = 60
 
 def main():
     clock = pygame.time.Clock()
     run = True
-    #game = Game(WIN)
+    game = Game(WIN)
     
     while run:
         clock.tick(FPS)
@@ -20,6 +22,9 @@ def main():
                 pos = pygame.mouse.get_pos()
                 print(pos)
 
+        game.update()
+        game.render()
+        
     pygame.quit()
 
 main()
