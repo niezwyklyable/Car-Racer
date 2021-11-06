@@ -1,9 +1,9 @@
-# this is an abstract class - instantiating for testing purposes only !!!
+# this is an abstract class - no instantiating allowed !!!
 class Sprite():
-    def __init__(self, IMG, x=0, y=0, type='abstract_sprite'):
-        self.IMG = IMG
+    def __init__(self, x=0, y=0, IMG=None, type=''):
         self.x = x
         self.y = y
+        self.IMG = IMG
         self.type = type
 
     def draw(self, win):

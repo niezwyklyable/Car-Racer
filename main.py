@@ -3,7 +3,7 @@ from cc.maths import WIDTH, HEIGHT
 from cc.game import Game
 
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption('Car Racer v1.0 by AW')
+pygame.display.set_caption('Car Racer by AW')
 FPS = 60
 
 def main():
