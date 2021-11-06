@@ -1,12 +1,12 @@
 import pygame
-from cc.finish import FinishFlag
-from .constants import BACKGROUND, TRACK
+from .finish import FinishFlag
+from .constants import BACKGROUND, TRACK, FF_POS_X, FF_POS_Y
 
 class Game():
     def __init__(self, win):
         self.win = win
         self.finish_flag = None
-        self.create_finish_flag()
+        self.create_finish_flag(FF_POS_X, FF_POS_Y)
 
     def render(self):
         self.win.blit(BACKGROUND, (0, 0))
@@ -18,5 +18,5 @@ class Game():
     def update(self):
         pass
 
-    def create_finish_flag(self):
-        self.finish_flag = FinishFlag(175, 270)
+    def create_finish_flag(self, x, y):
+        self.finish_flag = FinishFlag(x, y)
