@@ -1,10 +1,9 @@
-# 900 x 900 - original dims
-# target dims
 WIDTH = 800
 HEIGHT = 800
+ORIGINAL = 900
 
-def scale_x(x):
-    return int(x / 900 * WIDTH)
+def scale_x(w, original=ORIGINAL, target=WIDTH):
+    return int(w / original * target)
 
-def scale_y(y):
-    return int(y / 900 * HEIGHT)
+def scale_y(h, original=ORIGINAL, target=HEIGHT):
+    return int(h / original * target)
