@@ -4,7 +4,7 @@ from cc.game import Game
 
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Car Racer by AW')
-FPS = 60
+FPS = 30
 
 def main():
     clock = pygame.time.Clock()

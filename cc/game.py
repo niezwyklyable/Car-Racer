@@ -22,11 +22,13 @@ class Game():
         pygame.display.update()
 
     def update(self):
-        pass
+        for c in self.cars:
+            c.move_forward()
 
     def create_finish_flag(self, x, y):
         self.finish_flag = FinishFlag(x, y)
 
+    # create cars exactly where the finish flag is (not necessarily on FF_POS_X and FF_POS_Y poses)
     def create_cars(self):
         self.cars.append(Car(self.finish_flag.x-self.finish_flag.IMG.get_width()//4,\
              self.finish_flag.y-self.finish_flag.IMG.get_height()//2+RED_CAR.get_height()//2))
