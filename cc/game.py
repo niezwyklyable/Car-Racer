@@ -1,7 +1,7 @@
 import pygame
 from .finish import FinishFlag
-from .constants import BACKGROUND, FF_TARGET_H, TRACK, FF_POS_X, FF_POS_Y, RED_CAR
-from .car import RedCar, GreenCar
+from .constants import BACKGROUND, TRACK, FF_POS_X, FF_POS_Y, RED_CAR
+from .car import Car
 
 class Game():
     def __init__(self, win):
@@ -28,8 +28,9 @@ class Game():
         self.finish_flag = FinishFlag(x, y)
 
     def create_cars(self):
-        self.cars.append(RedCar(self.finish_flag.x-self.finish_flag.IMG.get_width()//4,\
+        self.cars.append(Car(self.finish_flag.x-self.finish_flag.IMG.get_width()//4,\
              self.finish_flag.y-self.finish_flag.IMG.get_height()//2+RED_CAR.get_height()//2))
 
-        self.cars.append(GreenCar(self.finish_flag.x+self.finish_flag.IMG.get_width()//4,\
-             self.finish_flag.y-self.finish_flag.IMG.get_height()//2+RED_CAR.get_height()//2))
+        # AI car in the future... AICar(Car)
+        #self.cars.append(AICar(self.finish_flag.x+self.finish_flag.IMG.get_width()//4,\
+             #self.finish_flag.y-self.finish_flag.IMG.get_height()//2+RED_CAR.get_height()//2))
