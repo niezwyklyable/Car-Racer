@@ -22,6 +22,12 @@ def main():
                 pos = pygame.mouse.get_pos()
                 print(pos)
 
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    game.car.turn_left()
+                elif event.key == pygame.K_RIGHT:
+                    game.car.turn_right()
+
         game.update()
         game.render()
         
