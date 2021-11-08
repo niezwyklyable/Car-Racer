@@ -1,6 +1,6 @@
 import pytest
 from cc.car import Car
-from cc.maths import WIDTH, HEIGHT
+from cc.constants import WIDTH, HEIGHT
 import math
 
 def test_dirs():

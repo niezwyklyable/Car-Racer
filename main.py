@@ -1,5 +1,5 @@
 import pygame
-from cc.maths import WIDTH, HEIGHT
+from cc.constants import WIDTH, HEIGHT
 from cc.game import Game
 
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
