@@ -1,3 +1,5 @@
+from pygame.mask import from_surface
+
 # this is an abstract class - no instantiating allowed !!!
 class Sprite():
     def __init__(self, IMG, type, x, y):
@@ -12,3 +14,8 @@ class Sprite():
 
     def move(self):
         pass
+
+    # needed to collision detection
+    def create_mask(self):
+        self.mask = from_surface(self.IMG) 
+        self.rect = self.IMG.get_rect(center=(self.x, self.y))

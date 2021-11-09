@@ -14,6 +14,7 @@ class Car(Sprite):
         self.speed = 0 # from 0 to MAX_SPEED but negative values are also taken into consideration in the future
         self.dir = 0 # there are as many different dirs as STATES says
         self.pick_random_color()
+        self.create_mask()
 
     def pick_random_color(self):
         random_color = random.choice((RED_CAR, GREEN_CAR, PURPLE_CAR, WHITE_CAR, GREY_CAR))
