@@ -8,6 +8,8 @@ class Car(MySprite):
     MAX_SPEED = 3 # this can be changed in the future when levels will be created
     ACCEL = 0.05 # acceleration of a car (realistic feature)
     STATES = 16 # number of possible dirs
+    SPEED_DECAY = 0.8 # coeff of speed decaying when car is collide with track border
+    STOP_THRESHOLD = 0.03 # if speed is below it during the bouncing, the car completely and immediately stops
 
     def __init__(self, x, y):
         super().__init__(image=None, type='car', x=x, y=y)
@@ -15,6 +17,7 @@ class Car(MySprite):
         self.dir = 0 # there are as many different dirs as STATES says
         self.pick_random_color()
         self.create_mask()
+        self.is_bouncing = False # the flag needed to try the car restores on the track by itself
 
     def pick_random_color(self):
         random_color = random.choice((RED_CAR, GREEN_CAR, PURPLE_CAR, WHITE_CAR, GREY_CAR))
@@ -63,8 +66,8 @@ class Car(MySprite):
                 sign_x = -1
                 sign_y = -1
 
-            speed_x = sign_x * abs(math.sin(alfa) * self.speed)
-            speed_y = sign_y * abs(math.cos(alfa) * self.speed)
+            speed_x = sign_x * abs(math.sin(alfa)) * self.speed
+            speed_y = sign_y * abs(math.cos(alfa)) * self.speed
             self.x += speed_x
             self.y += speed_y
 
@@ -86,3 +89,15 @@ class Car(MySprite):
             self.dir += 1 
             
         self.image = self.IMGs[self.dir]
+
+    def move_backward(self):
+        self.is_bouncing = True
+        self.speed = -self.MAX_SPEED
+
+    # thanks to that method the car is not going to loop the multiple collisions
+    def strive_for_stop(self):
+        if abs(self.speed) > self.STOP_THRESHOLD:
+            self.speed *= -self.SPEED_DECAY
+        else:
+            self.is_bouncing = False
+            self.speed = 0

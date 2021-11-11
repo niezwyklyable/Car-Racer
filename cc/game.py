@@ -46,10 +46,16 @@ class Game():
     def check_collision(self):
         # update mask and rect status - it makes sense only for dynamic objects 
         self.car.create_mask()
-
+ 
         # collision detection between car and track border
         # args: Sprite, Group, dokill, collision detection method
         if pygame.sprite.spritecollide(self.car, self.track_border, False, pygame.sprite.collide_mask):
             pygame.display.set_caption('collision')
+            if self.car.speed == self.car.MAX_SPEED:
+                self.car.move_backward() # the first bounce is full and independent (without decay)
+            elif self.car.is_bouncing:
+                self.car.strive_for_stop() # every next bounce is weaker due to speed decay until its reach speed 0
+            else:
+                self.car.move_backward() # try to restore on the track after bouncing (repeat the process actually)
         else:
             pygame.display.set_caption('no collision')
