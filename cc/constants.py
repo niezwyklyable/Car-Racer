@@ -16,6 +16,9 @@ CAR_W, CAR_H = 38, 76
 # car size reductor
 COEF = 0.6
 
+# max level of a game
+MAX_LEVEL = 3
+
 # assets
 BACKGROUND = scale(load('imgs/grass.jpg'), (WIDTH, HEIGHT))
 TRACK = scale(load('imgs/track.png'), (WIDTH, HEIGHT))
