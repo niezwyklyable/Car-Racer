@@ -1,16 +1,16 @@
-from .sprite import Sprite
+from .sprite import MySprite
 from .constants import RED_CAR, GREEN_CAR, PURPLE_CAR, WHITE_CAR, GREY_CAR
 import random
 from pygame.transform import rotate
 import math
 
-class Car(Sprite):
+class Car(MySprite):
     MAX_SPEED = 3 # this can be changed in the future when levels will be created
     ACCEL = 0.05 # acceleration of a car (realistic feature)
     STATES = 16 # number of possible dirs
 
     def __init__(self, x, y):
-        super().__init__(IMG=None, type='car', x=x, y=y)
+        super().__init__(image=None, type='car', x=x, y=y)
         self.speed = 0 # from 0 to MAX_SPEED but negative values are also taken into consideration in the future
         self.dir = 0 # there are as many different dirs as STATES says
         self.pick_random_color()
@@ -23,7 +23,7 @@ class Car(Sprite):
             # rotate() and other transform methods should be used once (means only on an original one) otherwise it's strive for a bugg
             self.IMGs.update({i: rotate(random_color, int(-1 * i / self.STATES * 360))})
 
-        self.IMG = self.IMGs[self.dir]
+        self.image = self.IMGs[self.dir]
 
     def move_forward(self):
         # for testing purposes only
@@ -77,7 +77,7 @@ class Car(Sprite):
         else:
             self.dir -= 1 
             
-        self.IMG = self.IMGs[self.dir]
+        self.image = self.IMGs[self.dir]
 
     def turn_right(self):
         if self.dir == self.STATES - 1:
@@ -85,4 +85,4 @@ class Car(Sprite):
         else:
             self.dir += 1 
             
-        self.IMG = self.IMGs[self.dir]
+        self.image = self.IMGs[self.dir]

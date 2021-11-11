@@ -33,18 +33,22 @@ class Game():
 
     # create a car exactly where the finish flag is (not necessarily on FF_POS_X and FF_POS_Y poses)
     def create_cars(self):
-        self.car = Car(self.finish_flag.x-self.finish_flag.IMG.get_width()//4,\
-             self.finish_flag.y-self.finish_flag.IMG.get_height()//2+RED_CAR.get_height()//2)
+        self.car = Car(self.finish_flag.x-self.finish_flag.image.get_width()//4,\
+             self.finish_flag.y-self.finish_flag.image.get_height()//2+RED_CAR.get_height()//2)
 
         # AI car in the future... AICar(Car)
-        #self.AI_car = AICar(self.finish_flag.x+self.finish_flag.IMG.get_width()//4,\
-             #self.finish_flag.y-self.finish_flag.IMG.get_height()//2+RED_CAR.get_height()//2)
+        #self.AI_car = AICar(self.finish_flag.x+self.finish_flag.image.get_width()//4,\
+             #self.finish_flag.y-self.finish_flag.image.get_height()//2+RED_CAR.get_height()//2)
 
     def create_border(self, x, y):
-        self.track_border = pygame.sprite.Group(TrackBorder(x, y))
+        self.track_border = pygame.sprite.Group(TrackBorder(x, y)) # Group class is needed to collision detection
 
     def check_collision(self):
+        # update mask and rect status - it makes sense only for dynamic objects 
         self.car.create_mask()
+
+        # collision detection between car and track border
+        # args: Sprite, Group, dokill, collision detection method
         if pygame.sprite.spritecollide(self.car, self.track_border, False, pygame.sprite.collide_mask):
             pygame.display.set_caption('collision')
         else:
