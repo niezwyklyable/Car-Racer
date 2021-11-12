@@ -1,6 +1,6 @@
 import pygame
 from .finish import FinishFlag
-from .constants import BACKGROUND, HEIGHT, TRACK, FF_POS_X, FF_POS_Y, RED_CAR, WIDTH, MAX_LEVEL, WHITE, FPS
+from .constants import BACKGROUND, HEIGHT, TRACK, FF_POS_X, FF_POS_Y, RED_CAR, WIDTH, MAX_LEVEL, WHITE, FPS, BLACK
 from .car import Car
 from .border import TrackBorder
 
@@ -13,7 +13,7 @@ class Game():
         self.track_border = None
         #self.AI_car = None # in the future...
         self.create_finish_flag(FF_POS_X, FF_POS_Y)
-        self.level = 1
+        self.level = 3
         self.create_cars()
         self.create_border(WIDTH//2, HEIGHT//2)
         self.frames = 0
@@ -69,7 +69,7 @@ class Game():
             elif self.car.distance > self.car.DISTANCE_THRESHOLD and self.level >= MAX_LEVEL:
                 self.gameover = True
                 font = pygame.font.SysFont('comicsans', 80)
-                self.msg = font.render('YOU WON!', 1, WHITE)
+                self.msg = font.render('YOU WON!', 1, WHITE, BLACK) # that's quite interesting that the last argument is neither required arg nor kwarg...
 
         # collision detection between car and track border
         # args: Sprite, Group, dokill, collision detection method

@@ -35,3 +35,4 @@ WHITE_CAR = scale(load('imgs/white-car.png'), (int(CAR_W * COEF), int(CAR_H * CO
 
 # colors
 WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
