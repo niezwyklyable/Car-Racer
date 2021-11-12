@@ -1,6 +1,6 @@
 import pygame
 from .finish import FinishFlag
-from .constants import BACKGROUND, HEIGHT, TRACK, FF_POS_X, FF_POS_Y, RED_CAR, WIDTH, MAX_LEVEL
+from .constants import BACKGROUND, HEIGHT, TRACK, FF_POS_X, FF_POS_Y, RED_CAR, WIDTH, MAX_LEVEL, WHITE, FPS
 from .car import Car
 from .border import TrackBorder
 
@@ -13,9 +13,12 @@ class Game():
         self.track_border = None
         #self.AI_car = None # in the future...
         self.create_finish_flag(FF_POS_X, FF_POS_Y)
-        self.level = 2
+        self.level = 1
         self.create_cars()
         self.create_border(WIDTH//2, HEIGHT//2)
+        self.frames = 0
+        self.gameover = False
+        self.msg = '' # text that will be blitted in the end of a game
 
     def render(self):
         self.win.blit(BACKGROUND, (0, 0))
@@ -23,12 +26,18 @@ class Game():
         self.track_border.draw(self.win) # it is different draw method - comes from Group class
         self.finish_flag.draw(self.win)
         self.car.draw(self.win)
+        self.show_info()
+
+        if self.gameover: 
+            self.win.blit(self.msg, (int(WIDTH / 2 - self.msg.get_width() / 2), \
+                int(HEIGHT / 2 - self.msg.get_height() / 2)))
 
         pygame.display.update()
 
     def update(self):
         self.car.move_forward()
         self.check_collision()
+        self.frames += 1
 
     def create_finish_flag(self, x, y):
         self.finish_flag = FinishFlag(x, y)
@@ -55,9 +64,12 @@ class Game():
         if pygame.sprite.spritecollide(self.car, self.finish_flag_grp_obj, False, pygame.sprite.collide_mask):
             if self.car.distance > self.car.DISTANCE_THRESHOLD and self.level < MAX_LEVEL:
                 self.level += 1
+                self.frames = 0
                 self.create_cars()
             elif self.car.distance > self.car.DISTANCE_THRESHOLD and self.level >= MAX_LEVEL:
-                self.end_of_game()
+                self.gameover = True
+                font = pygame.font.SysFont('comicsans', 80)
+                self.msg = font.render('YOU WON!', 1, WHITE)
 
         # collision detection between car and track border
         # args: Sprite, Group, dokill, collision detection method
@@ -69,5 +81,17 @@ class Game():
             else:
                 self.car.move_backward() # try to restore on the track after bouncing (repeat the process actually)
 
-    def end_of_game(self):
-        print('END OF THE GAME! YOU REACHED MAX LEVEL!')
+    def show_info(self):
+        font = pygame.font.SysFont('comicsans', 30)
+
+        text = font.render(f'Level {self.level}', 1, WHITE)
+        self.win.blit(text, (20, 675))
+
+        text = font.render('Speed: {:.1f}px/s'.format(self.car.speed * FPS), 1, WHITE) # px/frame * frames/s
+        self.win.blit(text, (20, 705))
+
+        text = font.render(f'Distance: {self.car.distance}frames', 1, WHITE)
+        self.win.blit(text, (20, 735))
+
+        text = font.render(f'Time: {int(self.frames / FPS)}s', 1, WHITE) # frames / (frames * s)
+        self.win.blit(text, (20, 765))

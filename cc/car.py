@@ -16,7 +16,7 @@ class Car(MySprite):
         self.pick_random_color()
         self.create_mask()
         self.is_bouncing = True # the flag needed to try the car restores on the track by itself
-        self.distance = 0 # distance that the car rode moving forward (number of frames)
+        self.distance = 0 # distance that the car rode (number of frames)
         self.lvl = lvl
         self.set_parameters() # depending on game lvl
 
@@ -35,10 +35,7 @@ class Car(MySprite):
         speed_y = self.speed
 
         # needed for finish flag collision detection
-        if self.speed >= 0:
-            self.distance += 1
-        else:
-            self.distance -= 1
+        self.distance += 1
 
         # the car strive for its max speed
         if self.speed < self.MAX_SPEED:

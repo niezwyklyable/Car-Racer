@@ -1,6 +1,9 @@
 from pygame.image import load
 from pygame.transform import scale
 
+# screen refreshing frequency
+FPS = 30
+
 # screen dims
 WIDTH, HEIGHT = 800, 800
 
@@ -29,3 +32,6 @@ GREY_CAR = scale(load('imgs/grey-car.png'), (int(CAR_W * COEF), int(CAR_H * COEF
 PURPLE_CAR = scale(load('imgs/purple-car.png'), (int(CAR_W * COEF), int(CAR_H * COEF)))
 RED_CAR = scale(load('imgs/red-car.png'), (int(CAR_W * COEF), int(CAR_H * COEF)))
 WHITE_CAR = scale(load('imgs/white-car.png'), (int(CAR_W * COEF), int(CAR_H * COEF)))
+
+# colors
+WHITE = (255, 255, 255)

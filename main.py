@@ -1,16 +1,16 @@
 import pygame
-from cc.constants import WIDTH, HEIGHT
+from cc.constants import WIDTH, HEIGHT, FPS
 from cc.game import Game
 
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Car Racer by AW')
-FPS = 30
 
 def main():
     clock = pygame.time.Clock()
     run = True
     game = Game(WIN)
-    
+    pygame.init()
+
     while run:
         clock.tick(FPS)
 
@@ -23,12 +23,15 @@ def main():
                 print(pos)
 
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
-                    game.car.turn_left()
-                elif event.key == pygame.K_RIGHT:
-                    game.car.turn_right()
+                if not game.gameover:
+                    if event.key == pygame.K_LEFT:
+                        game.car.turn_left()
+                    elif event.key == pygame.K_RIGHT:
+                        game.car.turn_right()
 
-        game.update()
+        if not game.gameover:
+            game.update()
+
         game.render()
         
     pygame.quit()
