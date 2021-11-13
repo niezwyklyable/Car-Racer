@@ -91,8 +91,6 @@ class Game():
         # collision detection between car and track border
         # args: Sprite, Group, dokill, collision detection method
         if pygame.sprite.spritecollide(self.car, self.track_border, False, pygame.sprite.collide_mask):
-            self.reward = -BORDER_HIT_PENALTY # q learning stuff
-
             if self.car.speed == self.car.MAX_SPEED:
                 self.car.move_backward() # the first bounce is full and independent (without decay)
             elif self.car.is_bouncing:
@@ -102,6 +100,8 @@ class Game():
 
         # collision detection between AI car and track border
         if pygame.sprite.spritecollide(self.AI_car, self.track_border, False, pygame.sprite.collide_mask):
+            self.reward = -BORDER_HIT_PENALTY # q learning stuff
+
             if self.AI_car.speed == self.AI_car.MAX_SPEED:
                 self.AI_car.move_backward() # the first bounce is full and independent (without decay)
             elif self.AI_car.is_bouncing:

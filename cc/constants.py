@@ -46,8 +46,6 @@ EPS_START = 0.9 # initial value of epsilon value
 EPS_DECAY = 0.9998 # coeff what decreaces constantly epsilon value with each episode
 LEARNING_RATE = 0.1 # q learning function coeff
 DISCOUNT = 0.85 # q learning function coeff
-EPISODES = 25000
+EPISODES = 10000
 SHOW_EVERY = 500 # determines how frequently render episodes during the learning process
-
-
-
+MAX_FRAMES = 2000 # maybe game.AI_car.distance should be proper observation (state) too ?

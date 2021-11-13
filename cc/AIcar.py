@@ -12,6 +12,6 @@ class AICar(Car):
         if choice == 0:
             self.turn_left()
         elif choice == 1:
-            pass # do nothing (only move_forward() method is called)
-        elif choice == 2: # actually else
             self.turn_right()
+        else:
+            pass # do nothing (only move_forward() method is called)

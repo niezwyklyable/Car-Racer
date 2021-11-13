@@ -5,7 +5,7 @@ from cc.game import Game
 # q learning stuff
 import numpy as np
 import pickle
-from cc.constants import CHOICES, FINISH_FLAG_REWARD, BORDER_HIT_PENALTY, EPS_START, EPS_DECAY, LEARNING_RATE, DISCOUNT, EPISODES, SHOW_EVERY
+from cc.constants import CHOICES, FINISH_FLAG_REWARD, BORDER_HIT_PENALTY, EPS_START, EPS_DECAY, LEARNING_RATE, DISCOUNT, EPISODES, SHOW_EVERY, MAX_FRAMES
 
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Car Racer by AW')
@@ -50,20 +50,21 @@ def train_q_table():
     game = Game(WIN)
     pygame.init()
 
-    start_q_table = None # name of a pickle file from which loaded is q table (if None there will be created q table with random values)
+    start_q_table = None
+    #start_q_table = 'q_table-level-0.pickle' # name of a pickle file from which loaded is q table (if None there will be created q table with random values)
     epsilon = EPS_START # randomness threshold (decides if the q learning algorithm takes either the value from q table or random value from specific range)
         # 0.0 (always from q table), 1.0 (always random values)
         # it should be equal 0.0 if start_q_table is different than None
     trained_level = 0 # level to be trained
 
     if start_q_table is None:
-        q_table = np.random.uniform(low=-5, high=0, size=([WIDTH, HEIGHT, CHOICES])) # dims of tensor: all state (observation) dims X action dim (the most internal)
+        q_table = np.random.uniform(low=-5, high=0, size=([MAX_FRAMES, game.AI_car.STATES, CHOICES])) # dims of tensor: all state (observation) dims X action dim (the most internal)
     else:
         # load the q table from a file
         with open(start_q_table, 'rb') as f:
             q_table = pickle.load(f)
 
-    for episode in range(EPISODES):
+    for episode in range(1, EPISODES + 1):
         # restore the environment
         game.create_cars()
         game.level = trained_level
@@ -87,7 +88,7 @@ def train_q_table():
                     pos = pygame.mouse.get_pos()
                     print(pos)
 
-            obs = (np.int(game.AI_car.x), np.int(game.AI_car.y)) # current state of the agent
+            obs = (game.frames, game.AI_car.dir) # current state of the agent
 
             if np.random.random() > epsilon:
                 action = np.argmax(q_table[obs]) # takes the action based on the max reward from q table
@@ -99,14 +100,14 @@ def train_q_table():
             game.update()
             
             # calculate the new q value and update the q table with it
-            new_obs = (np.int(game.AI_car.x), np.int(game.AI_car.y)) # future state of the agent (after update the env)
+            new_obs = (game.frames, game.AI_car.dir) # future state of the agent (after update the env)
             max_future_q = np.max(q_table[new_obs])
             current_q = q_table[obs + (action,)]
 
             if game.reward == FINISH_FLAG_REWARD:
-                new_q = FINISH_FLAG_REWARD
+                 new_q = FINISH_FLAG_REWARD
             elif game.reward == -BORDER_HIT_PENALTY:
-                new_q = -BORDER_HIT_PENALTY
+                 new_q = -BORDER_HIT_PENALTY
             else:
                 new_q = (1 - LEARNING_RATE) * current_q + LEARNING_RATE * (game.reward + DISCOUNT * max_future_q)
 
@@ -119,6 +120,7 @@ def train_q_table():
 
             if game.reward == FINISH_FLAG_REWARD or game.reward == -BORDER_HIT_PENALTY:
                 done = True
+                print(f'Frames: {game.frames}, reward: {game.reward}, x: {game.AI_car.x}, y: {game.AI_car.y}')
 
         epsilon *= EPS_DECAY
 
