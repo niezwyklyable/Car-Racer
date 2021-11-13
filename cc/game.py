@@ -4,6 +4,7 @@ from .constants import BACKGROUND, HEIGHT, TRACK, FF_POS_X, FF_POS_Y, RED_CAR, W
 from .car import Car
 from .border import TrackBorder
 from .AIcar import AICar
+from .constants import FINISH_FLAG_REWARD, BORDER_HIT_PENALTY, MOVE_PENALTY # q learning stuff
 
 class Game():
     def __init__(self, win):
@@ -20,6 +21,7 @@ class Game():
         self.frames = 0
         self.gameover = False
         self.msg = '' # text that will be blitted in the end of a game
+        self.reward = 0 # q learning stuff
 
     def render(self):
         self.win.blit(BACKGROUND, (0, 0))
@@ -63,6 +65,9 @@ class Game():
         # update mask and rect status - it makes sense only for dynamic objects 
         self.car.create_mask()
         self.AI_car.create_mask()
+
+        # if there is no collision with AI car, determines appropriate reward
+        self.reward = -MOVE_PENALTY # q learning stuff
  
         # collision detection between car and finish flag (must be as the first checking)
         if pygame.sprite.spritecollide(self.car, self.finish_flag_grp_obj, False, pygame.sprite.collide_mask):
@@ -78,6 +83,7 @@ class Game():
         # collision detection between AI car and finish flag
         if pygame.sprite.spritecollide(self.AI_car, self.finish_flag_grp_obj, False, pygame.sprite.collide_mask):
             if self.AI_car.distance > self.AI_car.DISTANCE_THRESHOLD:
+                self.reward = FINISH_FLAG_REWARD # q learning stuff
                 self.gameover = True
                 font = pygame.font.SysFont('comicsans', 80)
                 self.msg = font.render('YOU LOST!', 1, WHITE, BLACK)
@@ -85,6 +91,8 @@ class Game():
         # collision detection between car and track border
         # args: Sprite, Group, dokill, collision detection method
         if pygame.sprite.spritecollide(self.car, self.track_border, False, pygame.sprite.collide_mask):
+            self.reward = -BORDER_HIT_PENALTY # q learning stuff
+
             if self.car.speed == self.car.MAX_SPEED:
                 self.car.move_backward() # the first bounce is full and independent (without decay)
             elif self.car.is_bouncing:
@@ -92,7 +100,7 @@ class Game():
             else:
                 self.car.move_backward() # try to restore on the track after bouncing (repeat the process actually)
 
-        # collision detection between car and track border
+        # collision detection between AI car and track border
         if pygame.sprite.spritecollide(self.AI_car, self.track_border, False, pygame.sprite.collide_mask):
             if self.AI_car.speed == self.AI_car.MAX_SPEED:
                 self.AI_car.move_backward() # the first bounce is full and independent (without decay)
