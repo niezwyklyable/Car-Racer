@@ -41,8 +41,8 @@ class Game():
     def update(self):
         self.car.move_forward()
         self.AI_car.move_forward()
+        self.frames += 1 # it has to be before check_collision method due to repair bugg related to level changing
         self.check_collision()
-        self.frames += 1
 
     def create_finish_flag(self, x, y):
         self.finish_flag = FinishFlag(x, y)

@@ -5,19 +5,36 @@ from cc.game import Game
 # q learning stuff
 import numpy as np
 import pickle
-from cc.constants import CHOICES, FINISH_FLAG_REWARD, BORDER_HIT_PENALTY, EPS_START, EPS_DECAY, LEARNING_RATE, DISCOUNT, EPISODES, SHOW_EVERY, MAX_FRAMES, TRAINED_LEVEL, AI_STATES, LOW_RANDOM_THRESHOLD, HIGH_RANDOM_THRESHOLD
+from cc.constants import CHOICES, FINISH_FLAG_REWARD, BORDER_HIT_PENALTY, EPS_START, EPS_DECAY, LEARNING_RATE, DISCOUNT, EPISODES, SHOW_EVERY, MAX_FRAMES, TRAINED_LEVEL, LOW_RANDOM_THRESHOLD, HIGH_RANDOM_THRESHOLD
 
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Car Racer by AW')
 
 # q learning stuff
-training_mode = True # the flag that determines which function is going to be called (main or train_q_table)
+training_mode = False # the flag that determines which function is going to be called (main or train_q_table)
 
 def main():
     clock = pygame.time.Clock()
     run = True
+    q_tables = {1: None, 2: None, 3: None}
+    start_q_table_level_1 = 'q_table-level-1.pickle'
+    start_q_table_level_2 = 'q_table-level-2.pickle'
+    start_q_table_level_3 = 'q_table-level-3.pickle'
+
+    # load the q tables from files
+    with open(start_q_table_level_1, 'rb') as f:
+        q_tables[1] = pickle.load(f)
+
+    with open(start_q_table_level_2, 'rb') as f:
+        q_tables[2] = pickle.load(f)
+
+    with open(start_q_table_level_3, 'rb') as f:
+        q_tables[3] = pickle.load(f)
+
     game = Game(WIN)
     pygame.init()
+
+    print(q_tables)
 
     while run:
         clock.tick(FPS)
@@ -38,6 +55,7 @@ def main():
                         game.car.turn_right()
 
         if not game.gameover:
+            game.AI_car.action(np.argmax(q_tables[game.level][(game.frames, game.AI_car.dir)])) # q learning stuff - take an action (move_left, move_right or do nothing) based on a q_table for specific game level
             game.update()
 
         game.render()
@@ -124,7 +142,7 @@ def train_q_table():
         epsilon *= EPS_DECAY
 
     # saves the q_table for appropriate game level to the pickle file
-    with open(f'q_table-episodes-{EPISODES}-level-{TRAINED_LEVEL}-states-{AI_STATES}.pickle', 'wb') as f:
+    with open(f'q_table-level-{TRAINED_LEVEL}.pickle', 'wb') as f:
         pickle.dump(q_table, f)
 
     pygame.quit()
