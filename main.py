@@ -5,7 +5,7 @@ from cc.game import Game
 # q learning stuff
 import numpy as np
 import pickle
-from cc.constants import CHOICES, FINISH_FLAG_REWARD, BORDER_HIT_PENALTY, EPS_START, EPS_DECAY, LEARNING_RATE, DISCOUNT, EPISODES, SHOW_EVERY, MAX_FRAMES
+from cc.constants import CHOICES, FINISH_FLAG_REWARD, BORDER_HIT_PENALTY, EPS_START, EPS_DECAY, LEARNING_RATE, DISCOUNT, EPISODES, SHOW_EVERY, MAX_FRAMES, TRAINED_LEVEL, AI_STATES, LOW_RANDOM_THRESHOLD, HIGH_RANDOM_THRESHOLD
 
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Car Racer by AW')
@@ -51,14 +51,13 @@ def train_q_table():
     pygame.init()
 
     start_q_table = None
-    #start_q_table = 'q_table-level-0.pickle' # name of a pickle file from which loaded is q table (if None there will be created q table with random values)
+    #start_q_table = 'q_table-episodes-10000-level-3-states-16.pickle' # name of a pickle file from which loaded is q table (if None there will be created q table with random values)
     epsilon = EPS_START # randomness threshold (decides if the q learning algorithm takes either the value from q table or random value from specific range)
         # 0.0 (always from q table), 1.0 (always random values)
         # it should be equal 0.0 if start_q_table is different than None
-    trained_level = 0 # level to be trained
 
     if start_q_table is None:
-        q_table = np.random.uniform(low=-5, high=0, size=([MAX_FRAMES, game.AI_car.STATES, CHOICES])) # dims of tensor: all state (observation) dims X action dim (the most internal)
+        q_table = np.random.uniform(low=LOW_RANDOM_THRESHOLD, high=HIGH_RANDOM_THRESHOLD, size=([MAX_FRAMES, game.AI_car.STATES, CHOICES])) # dims of tensor: all state (observation) dims X action dim (the most internal)
     else:
         # load the q table from a file
         with open(start_q_table, 'rb') as f:
@@ -66,10 +65,10 @@ def train_q_table():
 
     for episode in range(1, EPISODES + 1):
         # restore the environment
+        game.level = TRAINED_LEVEL # it has to be before create_cars method
         game.create_cars()
-        game.level = trained_level
         game.frames = 0
-        game.gameover = False
+        game.gameover = False # it is not necessary to train but it looks neat when show is True
 
         if episode % SHOW_EVERY == 0:
             show = True
@@ -120,12 +119,12 @@ def train_q_table():
 
             if game.reward == FINISH_FLAG_REWARD or game.reward == -BORDER_HIT_PENALTY:
                 done = True
-                print(f'Frames: {game.frames}, reward: {game.reward}, x: {game.AI_car.x}, y: {game.AI_car.y}')
+                print(f'Frames: {game.frames}, reward: {game.reward}')
 
         epsilon *= EPS_DECAY
 
     # saves the q_table for appropriate game level to the pickle file
-    with open(f'q_table-level-{trained_level}.pickle', 'wb') as f:
+    with open(f'q_table-episodes-{EPISODES}-level-{TRAINED_LEVEL}-states-{AI_STATES}.pickle', 'wb') as f:
         pickle.dump(q_table, f)
 
     pygame.quit()

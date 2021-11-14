@@ -1,7 +1,8 @@
 from .car import Car
+from .constants import AI_STATES
 
 class AICar(Car):
-    #STATES = 32 # in the future?
+    STATES = AI_STATES
 
     def __init__(self, x, y, lvl):
         super().__init__(x=x, y=y, lvl=lvl)
