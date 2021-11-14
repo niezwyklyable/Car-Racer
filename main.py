@@ -8,7 +8,7 @@ import pickle
 from cc.constants import CHOICES, FINISH_FLAG_REWARD, BORDER_HIT_PENALTY, EPS_START, EPS_DECAY, LEARNING_RATE, DISCOUNT, EPISODES, SHOW_EVERY, MAX_FRAMES, TRAINED_LEVEL, LOW_RANDOM_THRESHOLD, HIGH_RANDOM_THRESHOLD
 
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption('Car Racer by AW')
+pygame.display.set_caption('Car Racer AI by AW')
 
 # q learning stuff
 training_mode = False # the flag that determines which function is going to be called (main or train_q_table)
