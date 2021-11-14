@@ -34,8 +34,6 @@ def main():
     game = Game(WIN)
     pygame.init()
 
-    print(q_tables)
-
     while run:
         clock.tick(FPS)
 
