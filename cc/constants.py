@@ -36,6 +36,8 @@ WHITE_CAR = scale(load('imgs/white-car.png'), (int(CAR_W * COEF), int(CAR_H * CO
 # colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
+ORANGE = (227, 156, 25)
+GREEN = (47, 135, 0)
 
 # AI - q learning stuff
 CHOICES = 3 # num of choices that AI can perform (turning left, do nothing, turning right)

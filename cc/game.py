@@ -23,6 +23,7 @@ class Game():
         self.gameover = False
         self.msg = '' # text that will be blitted in the end of a game
         self.reward = 0 # q learning stuff
+        self.train_mode = False # there is play mode by default
 
     def render(self):
         self.win.blit(BACKGROUND, (0, 0))
@@ -30,7 +31,9 @@ class Game():
         self.track_border.draw(self.win) # it is different draw method - comes from Group class
         self.finish_flag.draw(self.win)
         self.AI_car.draw(self.win)
-        self.car.draw(self.win)
+        if not self.train_mode:
+            self.car.draw(self.win)
+
         self.show_info()
 
         if self.gameover:
@@ -40,7 +43,9 @@ class Game():
         pygame.display.update()
 
     def update(self):
-        self.car.move_forward()
+        if not self.train_mode:
+            self.car.move_forward()
+
         self.AI_car.move_forward()
         self.frames += 1 # it has to be before check_collision method due to repair bugg related to level changing
         self.check_collision()
