@@ -6,8 +6,8 @@ import math
 
 class Car(MySprite):
     STATES = 16 # number of possible dirs
-    SPEED_DECAY = 0.8 # coeff of speed decaying when car is collide with track border
-    STOP_THRESHOLD = 0.03 # if abs of speed is below it during the bouncing, the car completely and immediately stops
+    SPEED_DECAY = 0.6 # coeff of speed decaying when car is collide with track border
+    STOP_THRESHOLD = 0.3 # if abs of speed is below it during the bouncing, the car completely and immediately stops
 
     def __init__(self, x, y, lvl):
         super().__init__(image=None, type='car', x=x, y=y)
@@ -95,9 +95,9 @@ class Car(MySprite):
             
         self.image = self.IMGs[self.dir]
 
-    def move_backward(self):
+    def retreat(self, speed):
         self.is_bouncing = True
-        self.speed = -self.MAX_SPEED
+        self.speed = speed
 
     # thanks to that method the car is not going to loop the multiple collisions
     def strive_for_stop(self):

@@ -5,6 +5,7 @@ from .car import Car
 from .border import TrackBorder
 from .AIcar import AICar
 from .constants import FINISH_FLAG_REWARD, BORDER_HIT_PENALTY, MOVE_PENALTY # q learning stuff
+import random
 
 class Game():
     def __init__(self, win):
@@ -92,22 +93,24 @@ class Game():
         # args: Sprite, Group, dokill, collision detection method
         if pygame.sprite.spritecollide(self.car, self.track_border, False, pygame.sprite.collide_mask):
             if self.car.speed == self.car.MAX_SPEED:
-                self.car.move_backward() # the first bounce is full and independent (without decay)
+                self.car.retreat(-self.car.MAX_SPEED) # the first bounce is full and independent (without decay)
             elif self.car.is_bouncing:
                 self.car.strive_for_stop() # every next bounce is weaker due to speed decay until its reach speed 0
             else:
-                self.car.move_backward() # try to restore on the track after bouncing (repeat the process actually)
+                dir = random.choice((-1, 1))
+                self.car.retreat(dir*self.car.MAX_SPEED/2) # try to restore on the track after bouncing
 
         # collision detection between AI car and track border
         if pygame.sprite.spritecollide(self.AI_car, self.track_border, False, pygame.sprite.collide_mask):
             self.reward = -BORDER_HIT_PENALTY # q learning stuff
 
             if self.AI_car.speed == self.AI_car.MAX_SPEED:
-                self.AI_car.move_backward() # the first bounce is full and independent (without decay)
+                self.AI_car.retreat(-self.car.MAX_SPEED) # the first bounce is full and independent (without decay)
             elif self.AI_car.is_bouncing:
                 self.AI_car.strive_for_stop() # every next bounce is weaker due to speed decay until its reach speed 0
             else:
-                self.AI_car.move_backward() # try to restore on the track after bouncing (repeat the process actually)
+                dir = random.choice((-1, 1))
+                self.AI_car.retreat(dir*self.car.MAX_SPEED/2) # try to restore on the track after bouncing (repeat the process actually)
 
     def show_info(self):
         font = pygame.font.SysFont('comicsans', 30)
